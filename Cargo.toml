@@ -1,0 +1,7 @@
+[package]
+name = "ctr-libc"
+version = "0.1.0"
+authors = ["Fenrir <fenrirwolf@gmail.com>"]
+
+[lib]
+name = "libc"
