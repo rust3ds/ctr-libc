@@ -45,9 +45,12 @@ pub type c_double = f64;
 pub type size_t = usize;
 pub type ssize_t = isize;
 
+pub type sighandler_t = size_t;
+
 extern "C" {
     pub fn memchr(cx: *const c_void, c: c_int, n: size_t) -> *mut c_void;
     pub fn memrchr(cx: *const c_void, c: c_int, n: size_t) -> *mut c_void;
+    pub fn signal( signum: c_int, handler: sighandler_t) -> sighandler_t;
     //TODO: write() will be converted to use c types at a later time.
     //Doing so right now would break ctru-rs
     pub fn write(fd: i32, buf: *const c_void, count: usize) -> isize;
