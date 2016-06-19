@@ -99,10 +99,11 @@ pub type nlink_t = u32;
 pub type uid_t = u32;
 pub type gid_t = u32;
 
-pub type off64_t = i64;
+pub type off_t = i32;
 pub type blksize_t = i32;
 pub type blkcnt64_t = i64;
-pub type ino64_t = u64;
+pub type ino_t = u32;
+pub type suseconds_t = i32;
 
 pub enum DIR {}
 
@@ -113,14 +114,20 @@ pub struct timespec {
 }
 
 #[derive(Copy, Clone)]
-pub struct stat64 {
+pub struct timeval {
+    pub tv_sec: time_t,
+    pub tv_usec: suseconds_t,
+}
+
+#[derive(Copy, Clone)]
+pub struct stat {
     pub st_dev: dev_t,
     pub st_mode: mode_t,
     pub st_nlink: nlink_t,
     pub st_uid: uid_t,
     pub st_gid: gid_t,
     pub st_rdev: dev_t,
-    pub st_size: off64_t,
+    pub st_size: off_t,
     pub st_blksize: blksize_t,
     pub st_blocks: blkcnt64_t,
     pub st_atime: time_t,
@@ -129,12 +136,12 @@ pub struct stat64 {
     pub st_mtime_nsec: c_long,
     pub st_ctime: time_t,
     pub st_ctime_nsec: c_long,
-    pub st_ino: ino64_t,
+    pub st_ino: ino_t,
 }
 
-pub struct dirent64 {
-    pub d_ino: ino64_t,
-    pub d_off: off64_t,
+pub struct dirent {
+    pub d_ino: ino_t,
+    pub d_off: off_t,
     pub d_reclen: c_ushort,
     pub d_type: c_uchar,
     pub d_name: [c_char; 256],
@@ -146,29 +153,31 @@ extern "C" {
     pub fn close(fd: c_int) -> c_int;
     pub fn closedir(dirp: *mut DIR) -> c_int;
     pub fn opendir(dirname: *const c_char) -> *mut DIR;
+    pub fn __errno() -> *const c_int;
     pub fn exit(status: c_int) -> !;
     pub fn fcntl(fd: c_int, cmd: c_int, ...) -> c_int;
     pub fn fdatasync(fd: c_int) -> c_int;
     pub fn free(p: *mut c_void);
-    pub fn fstat64(fildes: c_int, buf: *mut stat64) -> c_int;
-    pub fn ftruncate64(fd: c_int, length: off64_t) -> c_int;
+    pub fn fstat(fildes: c_int, buf: *mut stat) -> c_int;
+    pub fn ftruncate64(fd: c_int, length: off_t) -> c_int;
     pub fn fsync(fd: c_int) -> c_int;
+    pub fn gettimeofday(tp: *mut timeval, tz: *mut c_void) -> c_int;
     pub fn ioctl(fd: c_int, request: c_ulong, ...) -> c_int;
     pub fn link(src: *const c_char, dst: *const c_char) -> c_int;
-    pub fn lstat64(path: *const c_char, buf: *mut stat64) -> c_int;
-    pub fn lseek64(fd: c_int, offset: off64_t, whence: c_int) -> off64_t;
+    pub fn lstat(path: *const c_char, buf: *mut stat) -> c_int;
+    pub fn lseek(fd: c_int, offset: off_t, whence: c_int) -> off_t;
     pub fn memchr(cx: *const c_void, c: c_int, n: size_t) -> *mut c_void;
     pub fn memrchr(cx: *const c_void, c: c_int, n: size_t) -> *mut c_void;
     pub fn mkdir(path: *const c_char, mode: mode_t) -> c_int;
-    pub fn open64(path: *const c_char, oflag: c_int, ...) -> c_int;
+    pub fn open(path: *const c_char, oflag: c_int, ...) -> c_int;
     pub fn read(fd: c_int, puf: *mut c_void, count: size_t) -> ssize_t;
     pub fn readlink(path: *const c_char, buf: *mut c_char, bufsz: size_t) -> ssize_t;
-    pub fn readdir64_r(dirp: *mut DIR, entry: *mut dirent64, result: *mut *mut dirent64) -> c_int;
+    pub fn readdir_r(dirp: *mut DIR, entry: *mut dirent, result: *mut *mut dirent) -> c_int;
     pub fn realpath(pathname: *const c_char, resolved: *mut c_char) -> *mut c_char;
     pub fn rename(oldname: *const c_char, newname: *const c_char) -> c_int;
     pub fn rmdir(path: *const c_char) -> c_int;
     pub fn signal(signum: c_int, handler: sighandler_t) -> sighandler_t;
-    pub fn stat64(path: *const c_char, buf: *mut stat64) -> c_int;
+    pub fn stat(path: *const c_char, buf: *mut stat) -> c_int;
     pub fn strlen(cs: *const c_char) -> size_t;
     pub fn symlink(path1: *const c_char, path2: *const c_char) -> c_int;
     pub fn unlink(c: *const c_char) -> c_int;
