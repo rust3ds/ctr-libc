@@ -2,7 +2,6 @@
 #![no_std]
 
 
-
 // TODO: STDOUT_FILENO will be changed to c_int at a later time.
 // Changing it now would break ctru-rs
 pub const STDOUT_FILENO: i32 = 1;
@@ -31,11 +30,15 @@ pub const CLOCK_MONOTONIC: clockid_t = 1;
 
 // FS stuff
 pub const F_DUPFD: c_int = 0;
+pub const F_GETFD: c_int = 1;
+pub const F_SETFD: c_int = 2;
 pub const F_GETFL: c_int = 3;
 pub const F_SETFL: c_int = 4;
 pub const F_DUPFD_CLOEXEC: c_int = 1030;
 pub const FIOCLEX: c_ulong = 0x5451;
 pub const O_NONBLOCK: c_int = 2048;
+
+pub const FD_CLOEXEC: c_int = 0x1;
 
 pub const O_RDONLY: c_int = 0;
 pub const O_WRONLY: c_int = 1;
@@ -163,7 +166,6 @@ extern "C" {
     pub fn ftruncate(fd: c_int, length: off_t) -> c_int;
     pub fn fsync(fd: c_int) -> c_int;
     pub fn gettimeofday(tp: *mut timeval, tz: *mut c_void) -> c_int;
-    pub fn ioctl(fd: c_int, request: c_ulong, ...) -> c_int;
     pub fn link(src: *const c_char, dst: *const c_char) -> c_int;
     pub fn lstat(path: *const c_char, buf: *mut stat) -> c_int;
     pub fn lseek(fd: c_int, offset: off_t, whence: c_int) -> off_t;
