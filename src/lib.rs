@@ -1,6 +1,8 @@
 #![allow(improper_ctypes, non_camel_case_types)]
 #![no_std]
 
+
+
 // TODO: STDOUT_FILENO will be changed to c_int at a later time.
 // Changing it now would break ctru-rs
 pub const STDOUT_FILENO: i32 = 1;
@@ -152,14 +154,13 @@ extern "C" {
     pub fn clock_gettime(clk_id: clockid_t, tp: *mut timespec) -> c_int;
     pub fn close(fd: c_int) -> c_int;
     pub fn closedir(dirp: *mut DIR) -> c_int;
-    pub fn opendir(dirname: *const c_char) -> *mut DIR;
     pub fn __errno() -> *const c_int;
     pub fn exit(status: c_int) -> !;
     pub fn fcntl(fd: c_int, cmd: c_int, ...) -> c_int;
     pub fn fdatasync(fd: c_int) -> c_int;
     pub fn free(p: *mut c_void);
     pub fn fstat(fildes: c_int, buf: *mut stat) -> c_int;
-    pub fn ftruncate64(fd: c_int, length: off_t) -> c_int;
+    pub fn ftruncate(fd: c_int, length: off_t) -> c_int;
     pub fn fsync(fd: c_int) -> c_int;
     pub fn gettimeofday(tp: *mut timeval, tz: *mut c_void) -> c_int;
     pub fn ioctl(fd: c_int, request: c_ulong, ...) -> c_int;
@@ -170,6 +171,7 @@ extern "C" {
     pub fn memrchr(cx: *const c_void, c: c_int, n: size_t) -> *mut c_void;
     pub fn mkdir(path: *const c_char, mode: mode_t) -> c_int;
     pub fn open(path: *const c_char, oflag: c_int, ...) -> c_int;
+    pub fn opendir(dirname: *const c_char) -> *mut DIR;
     pub fn read(fd: c_int, puf: *mut c_void, count: size_t) -> ssize_t;
     pub fn readlink(path: *const c_char, buf: *mut c_char, bufsz: size_t) -> ssize_t;
     pub fn readdir_r(dirp: *mut DIR, entry: *mut dirent, result: *mut *mut dirent) -> c_int;
